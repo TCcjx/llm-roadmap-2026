@@ -7,6 +7,8 @@
 
 Sharing a suggested AI learning roadmap, for reference only. Additions and suggestions are welcome.
 
+> **来源**：本仓库基于 [jx888-max/AI-Study](https://github.com/jx888-max/AI-Study)（作者 **Yi Xuan**，MIT）二次整理。原仓库的 127 条链接全部保留，详见 [第八节：来源与致谢](#八来源与致谢)。
+
 大模型（LLM）学习路线与资料索引：从**原理 → 工程 → 应用 → 评测 → 训练 → 生态**，每个阶段给出目标、必须掌握的要点、动手清单、自检问题、精选资料。
 
 > 最后整轮核对：**2026-11-13**（arXiv 论文 ID、GitHub 仓库、官方文档站、PyPI 版本逐条验活）
@@ -57,7 +59,55 @@ Sharing a suggested AI learning roadmap, for reference only. Additions and sugge
 
 ---
 
-## 三、路线总览
+## 三、仓库结构（先看这张图）
+
+```
+llm-roadmap-2026/
+├── README.md                  ← 你在这里：总览 + 结构 + 路线 + 维护规则
+├── CONTRIBUTING.md            ← 贡献约定（纠错优先于新增）
+│
+├── 00-新手起点.md             ★ 入口：自测 / 环境三分支 / 硬件分档 / 14 天闭环 / 术语
+├── 数学与工程基础.md          ★ 前置：12 条“够用线”+ 8 道折叠自检
+│
+├── 01-基础原理.md             ┐
+├── 02-工程与推理部署.md       │
+├── 03-应用-Agent与RAG.md      ├─ 六阶段主线（每页都有：目标 / 要点 / 资料 / 动手 / 自检）
+├── 04-评测-观测-安全.md       │
+├── 05-训练-数据-对齐.md       │
+├── 06-多模态与生态.md         ┘
+│
+├── 07-2026动态与前沿.md       ★ 时效层：七个范式变化 / 模型版图 / 研究热点 / 术语表
+├── 08-自检参考答案.md         ★ 答案：21 道关键题（先做后看）
+├── 项目库与作品集.md          ★ 输出：28 个可验收项目 + 简历与面试
+│
+├── 优质参考.md                ← 资料库：论文库 / 手撕代码 / 博客 / Awesome
+├── llm_study.md               ← 早期的 9 条极简大纲（作为速览保留）
+│
+├── scripts/check_links.sh     ← 死链体检（四级判定）
+└── .github/workflows/link-check.yml  ← 季度定时体检 + 自动开 Issue
+```
+
+### 三类文件，别搞混
+
+| 类别 | 文件 | 怎么用 |
+|---|---|---|
+| **学习主线** | 00 → 数学 → 01–06 | **顺序读**，每页末尾做交付物 |
+| **随时查** | 数学基础、08 答案、优质参考 | **按需跳查**，不要从头读 |
+| **校准方向** | 07 动态、项目库 | **动手之后再读**，否则是纸上谈兵 |
+
+### 三种最短路径
+
+```
+只想快速做出东西    00 → 03 → 项目库 L1 → 04 ─────────────┐
+想搞懂原理          00 → 数学 → 01 → 项目库 L2 → 04 ──────┤→ 最后再看 07
+想转算法岗          00 → 数学 → 01 → 05 → 项目库 L3 → 04 ─┘
+```
+
+> 每页开头都有一行 **前置 / 预计耗时**，先看那行再决定要不要现在读。
+
+---
+
+## 四、路线总览
 
 | # | 阶段 | 一句话目标 | 交付物 | 分册 |
 |---|---|---|---|---|
@@ -84,7 +134,7 @@ Sharing a suggested AI learning roadmap, for reference only. Additions and sugge
 
 ---
 
-## 四、分册索引
+## 五、分册索引
 
 | 文件 | 内容 | 前置 |
 |---|---|---|
@@ -104,7 +154,7 @@ Sharing a suggested AI learning roadmap, for reference only. Additions and sugge
 
 ---
 
-## 五、维护与更新规则
+## 六、维护与更新规则
 
 仓库最大的失效风险不是内容过时，而是**链接腐烂**（大量 Medium / 个人博客 / "2025 最佳"类文章）。
 
@@ -134,7 +184,7 @@ REPORT=report.md bash scripts/check_links.sh
 
 ---
 
-## 六、贡献
+## 七、贡献
 
 欢迎提 Issue / PR 补充：
 
@@ -143,6 +193,37 @@ REPORT=report.md bash scripts/check_links.sh
 - 失效链接的替换地址
 
 提交时请标注：`[稳定]` / `[滚动 核对:YYYY-MM]`，并说明**为什么值得放进路线**（一句话即可，纯链接不收）。
+
+详细约定见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+---
+
+## 八、来源与致谢
+
+### 本仓库的来源
+
+本仓库是原仓库 **[jx888-max/AI-Study](https://github.com/jx888-max/AI-Study)** 的**二次整理版**。
+
+| 项目 | 说明 |
+|---|---|
+| 原仓库 | [https://github.com/jx888-max/AI-Study](https://github.com/jx888-max/AI-Study) |
+| 原作者 | **Yi Xuan**（Copyright (c) 2025，见 [LICENSE](LICENSE)） |
+| 原许可证 | MIT |
+| 原始形式 | 单页 `README.md`（79 条链接）+ `优质参考.md`（48 条）+ `llm_study.md`（9 条大纲） |
+| 本版改动 | 重构为分阶段路线；新增新手入口、数学基础、2026 动态、自检答案、项目库；架建链接体检 CI；补全并校正原仓库中缺失/过时的内容 |
+
+**原仓库的所有链接均予保留**（仅 3 条已 404 的链接做了替换并在正文注明），原作者提供的资料清单与大纲仍是本仓库的地基。
+
+### 致谢
+
+- 感谢 **Yi Xuan** 整理出最初的路线与资料清单——那 127 条链接是这一切的起点。
+- 感谢原仓库中引用的所有作者：论文作者、开源项目维护者、博主（尤其 Datawhale、Lilian Weng、苏剑林、Simon Willison、Andrej Karpathy 等）。
+- 感谢所有提交 Issue / PR 帮我们修死链、纠偏差的人。
+
+### 许可证
+
+沿用原仓库的 **MIT**：[LICENSE](LICENSE)
+（MIT 要求保留原始版权声明，因此 `LICENSE` 中保留了 Yi Xuan 的版权行，并追加了本版本的修改声明。）
 
 ---
 
