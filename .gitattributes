@@ -1,0 +1,11 @@
+# 统一换行符：Windows 上开发也要保证 Linux CI 能直接跑
+* text=auto eol=lf
+
+*.sh    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.md    text eol=lf
+
+*.png binary
+*.jpg binary
+*.gif binary

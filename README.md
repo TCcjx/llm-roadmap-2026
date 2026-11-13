@@ -1,274 +1,151 @@
-# AI-Study
-Sharing a suggested AI learning roadmap, for reference only.  Additions and suggestions are welcome.
+# LLM Roadmap 2026 · 大模型学习路线
 
-第一节：工程
+[![last-checked](https://img.shields.io/badge/last%20checked-2026--11--13-brightgreen)](README.md)
+[![freshness](https://img.shields.io/badge/%F0%9F%9F%A2%20stable%20%2F%20%F0%9F%9F%A1%20rolling%20%2F%20%F0%9F%94%B4%20archived-blueviolet)](#二资料新鲜度分级重要)
+[![link-check](https://img.shields.io/badge/link--check-quarterly%20CI-informational)](.github/workflows/link-check.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-1. FastAPI
+Sharing a suggested AI learning roadmap, for reference only. Additions and suggestions are welcome.
 
-https://medium.com/@mayurakshasikdar/fastapi-genai-in-2025-building-scalable-and-intelligent-apps-with-speed-4c2b980b2c40
+大模型（LLM）学习路线与资料索引：从**原理 → 工程 → 应用 → 评测 → 训练 → 生态**，每个阶段给出目标、必须掌握的要点、动手清单、自检问题、精选资料。
 
-2. LLM部署，编排Pipeline
+> 最后整轮核对：**2026-11-13**（arXiv 论文 ID、GitHub 仓库、官方文档站、PyPI 版本逐条验活）
+> 🚩 **新手从 [00](00-新手起点.md) 开始**；想先看“现在到哪一步了”再读 [07](07-2026动态与前沿.md)（有基础后再看）
+> 资料新鲜度分级见第二节。历史版本见 `git log`。
 
-https://northflank.com/blog/llm-deployment-pipeline
+---
 
-https://blog.logrocket.com/modern-ai-stack-2025/
+## 一、怎么用这个仓库
 
-https://llm-d.ai/docs/architecture
+三条路径，按目的选一条，**不要从头顺读**。
 
-3. vLLM，SGLang，TensorRT-LLM
+> 🚩 **完全新手？先读 [00 新手起点](00-新手起点.md)。** 它帮你装环境、选硬件路线、用 14 天走通一遍闭环。
+> 没有它，后面每一页都可能在第一段就劝退你。
 
-https://docs.vllm.com.cn/en/latest/getting_started/quickstart.html
+| 路径 | 适合谁 | 前置 | 建议顺序 | 大概用时 |
+|---|---|---|---|---|
+| **A. 应用工程** | 想尽快做出能上线的 RAG / Agent | 会 Python + 能调 API（**不需要显卡**） | [00](00-新手起点.md) → [03 应用层](03-应用-Agent与RAG.md) → [04 评测与安全](04-评测-观测-安全.md) → [02 部署](02-工程与推理部署.md) 选读 | 3–6 个月（含基础） |
+| **B. 算法训练** | 想搞懂训练、微调、对齐、RL | 会 PyTorch + 能接入 GPU（自有或租用） | [00](00-新手起点.md) → [数学基础](数学与工程基础.md) → [01 基础原理](01-基础原理.md) → [05 训练与对齐](05-训练-数据-对齐.md) → [02 部署](02-工程与推理部署.md) | 6–12 个月 |
+| **C. 查漏补缺** | 面试复盘、扫盲、内训 | 已有半年以上动手经验 | [01](01-基础原理.md) → [05](05-训练-数据-对齐.md) → [04](04-评测-观测-安全.md) → [07 2026 现状](07-2026动态与前沿.md) → [06 生态](06-多模态与生态.md) | 按需 |
 
-https://docs.sglang.ai/
+> **所有路径都建议穿插做项目**：题目在 [项目库与作品集](项目库与作品集.md)（28 个项目，分三档，每个都有验收标准）。
+> **数学不够使？** [数学与工程基础](数学与工程基础.md) 只列了 12 条“够用线”，**按需查，不要从头啃**。
 
-https://github.com/NVIDIA/TensorRT-LLM
+> **关于 [07 2026 动态](07-2026动态与前沿.md)**：它是给**已经动手过的人**校准方向的（术语密度最高），不建议作为第一页。新手先跳过，做完 14 天闭环再回来看。
 
-4. 最佳实践思路参考
+通用建议：
 
-https://techinfotech.tech.blog/2025/06/09/best-practices-to-build-llm-tools-in-2025/
+1. **先跑通一个最小闭环**，再回头补理论。把「调 API 做个小应用 → 上评测 → 发现幻觉/慢/贵 → 针对性学」当作主线。
+2. **一手资料优先**：论文原文 > 官方文档 > 厂商工程博客 > Medium 二手解读。
+3. **每个阶段都要有交付物**，没有交付物的学习等于没学（各分册末尾都列了「动手清单」）。
 
-5. 数据库
+---
 
-https://latenode.com/blog/ai-frameworks-technical-infrastructure/vector-databases-embeddings/best-vector-databases-for-rag-complete-2025-comparison-guide
+## 二、资料新鲜度分级（重要）
 
-6. LLM服务
+本仓库早已不只是 2025 年的清单，为避免"过期信息误导读者"，所有条目按三级标注：
 
-https://www.clarifai.com/blog/llm-inference-optimization/
+| 级别 | 含义 | 例子 | 维护方式 |
+|---|---|---|---|
+| 🟢 **稳定层** | 原理、经典论文、课程、官方文档，基本不会过时 | Attention Is All You Need、d2l、vLLM 文档 | 只在链接失效时修 |
+| 🟡 **滚动层** | 模型清单、框架版本、工具教程、"年度最佳"类文章，**默认半年过期** | 开源模型列表、各类 best-of-2025 | 每季度刷新，标注核对日期 |
+| 🔴 **归档层** | 已被替代但保留溯源 | 旧版本模型、旧版 API 教程 | 不删，移入归档区 |
 
-https://medium.com/@karuturividyasagar/the-big-llm-architecture-comparison-2025-a-beginner-friendly-guide-to-the-latest-open-weight-e731318af967
+**2026-11 更新说明**：滚动层已刷新到 2026 年 —— 模型版图、架构共识、研究热点、术语、评测观全部更新，旧版本移入归档。
+- 2026 年的**范式变化**与**路线调整建议**：见 [07 动态与前沿](07-2026动态与前沿.md)
+- 2026 年的**开源模型清单**：见 [06 §5](06-多模态与生态.md#5-开源模型清单滚动层)
 
-https://blog.vllm.ai/2025/09/05/anatomy-of-vllm.html
+---
 
-7. 上下文工程
+## 三、路线总览
 
-压缩
+| # | 阶段 | 一句话目标 | 交付物 | 分册 |
+|---|---|---|---|---|
+| 0 | **新手上路** | 装好环境、走通一遍闭环、建立成本直觉 | 一个 mini-RAG + 10 条评测集 | [00-新手起点](00-新手起点.md) |
+| 1 | **基础原理** | 能手写 attention、算清 KV cache 显存、看懂任意模型 config | 一个从零训练的 mini-GPT | [01-基础原理](01-基础原理.md) |
+| 2 | **工程与推理部署** | 能把模型以合理成本、低延迟稳定跑起来 | 一个压测过的推理服务 + 容量估算表 | [02-工程与推理部署](02-工程与推理部署.md) |
+| 3 | **应用层（Agent / RAG / 上下文）** | 能设计不靠运气的检索与智能体流程 | 一个带检索评估的 RAG + 一个工具型 Agent | [03-应用-Agent与RAG](03-应用-Agent与RAG.md) |
+| 4 | **评测、观测与安全** | 能证明你的系统"变好了"，且不会被打穿 | 一套回归测试集 + 线上 tracing + 红队报告 | [04-评测-观测-安全](04-评测-观测-安全.md) |
+| 5 | **训练、数据与对齐** | 能独立完成一次 SFT / 偏好对齐 / 小规模预训练 | 一次完整微调 + 对齐实验记录 | [05-训练-数据-对齐](05-训练-数据-对齐.md) |
+| 6 | **多模态与生态** | 跟得上变化、看得懂选型 | 一份选型对比 + 一条信息获取流水线 | [06-多模态与生态](06-多模态与生态.md) |
+| — | **资料库** | 论文/代码/博客/社区的长期入口 | — | [优质参考](优质参考.md) |
 
-https://python.langchain.ac.cn/docs/how_to/contextual_compression/
+### 依赖关系（别跳步）
 
-分层行动
+```
+01 原理 ──┬─→ 02 部署 ──→ 03 应用 ──→ 04 评测
+          └─→ 05 训练 ──┘
+03 应用 ──→ 06 生态（选型/多模态/新闻）
+```
 
-https://github.com/FoundationAgents/OpenManus
+- 只做应用（路径 A）：01 只需读到「能解释 KV cache 和 temperature」，不必会推导。
+- 04 评测**不要放到最后**：它决定你能不能判断 02/03/05 的改动有效。
+- 06 是持续性动作，不是阶段。
 
-8. 知识图谱
+---
 
-(暂无链接)
+## 四、分册索引
 
-第二节: 大模型基础
+| 文件 | 内容 | 前置 |
+|---|---|---|
+| [00-新手起点.md](00-新手起点.md) | **从这里开始**：三个自测、环境准备（Windows/宏/本地）、硬件分档、国内替代方案、14 天路径、术语最小集、零成本实验 | 无 |
+| [数学与工程基础.md](数学与工程基础.md) | 12 条“够用线”：线代/概率/信息论/精度 + Git/测试/日志/Docker/Linux；含 8 道自检（答案折叠） | 无（建议在 01 之前按需查） |
+| [01-基础原理.md](01-基础原理.md) | Transformer 细节、位置编码、归一化、注意力变体、MoE、Tokenizer、解码与采样、Scaling Law、从零实现 | 会 PyTorch |
+| [02-工程与推理部署.md](02-工程与推理部署.md) | 服务框架与网关、推理引擎、显存/吞吐估算、量化、投机解码、并行策略、向量库、上下文工程、知识图谱 | 能调 API + 一台 Linux/NVIDIA 机器 |
+| [03-应用-Agent与RAG.md](03-应用-Agent与RAG.md) | Prompt/CoT、结构化输出、RAG 全家族（HyDE/CRAG/Self-RAG/GraphRAG…）、Agent 工程、多智能体、MCP/A2A、AI 编程工具链 | 会 Python |
+| [04-评测-观测-安全.md](04-评测-观测-安全.md) | 评测体系与数据集构建、LLM-as-judge、基准、观测与 tracing、成本监控、提示注入与护栏 | 有一个能跑的系统 |
+| [05-训练-数据-对齐.md](05-训练-数据-对齐.md) | 预训练、数据工程、SFT/LoRA/QLoRA、RLHF/DPO 家族、Reasoning RL（GRPO）、分布式训练、训练框架 | ≥24GB 显存或能租 GPU |
+| [06-多模态与生态.md](06-多模态与生态.md) | 视觉/语音/生成、DeepResearch、开源模型清单（2026 版）、行业案例、信息源 | 完成 03 或 01 |
+| [07-2026动态与前沿.md](07-2026动态与前沿.md) | **2026 必读（但不适合入门页）**：七个范式变化、模型版图、研究热点数据、必读论文、工程新增点、路线调整、术语表、MCP 协议演进 | 已动手过 |
+| [优质参考.md](优质参考.md) | 论文库、手撕代码、博客、社区、Awesome 列表 | — |
+| [llm_study.md](llm_study.md) | 早期 9 条极简大纲（保留原文，作为速览版清单） | — |
+| [08-自检参考答案.md](08-自检参考答案.md) | 各分册自检题的**参考答案要点**（先自己做，再对答案） | 做完练习后 |
+| [项目库与作品集.md](项目库与作品集.md) | **28 个可验收项目**（L1/L2/L3）+ 作品集结构 + 简历公式 + 面试三问 + 十个反模式 | 完成 00 后即可开始 |
 
-1. Prompt（思维链，few shot，置信度等）
+---
 
-https://docs.lovable.dev/prompting/prompting-one
+## 五、维护与更新规则
 
-2. RAG（查询重写/扩展，混合搜索，重排压缩）
+仓库最大的失效风险不是内容过时，而是**链接腐烂**（大量 Medium / 个人博客 / "2025 最佳"类文章）。
 
-https://datawhalechina.github.io/all-in-rag/#/chapter1/01_RAG_intro
+1. **季度刷新**：每季度只动 🟡 滚动层，🟢 稳定层不动。
+2. **不删只移**：过期条目移到 🔴 归档区，保留原因（"被 X 取代"）。
+3. **每条滚动层内容必须带核对日期**，格式：`（核对 2026-11）`。
+4. **论文优先用 arXiv `abs` 永久链接**，不要用 html 版快照（`arxiv.org/html/xxxx` 会随版本变化失效）。
+5. **模型/工具条目请附 PyPI 或官方 changelog 证据**："过时"不是靠印象判断的（例：`torchtune` 停更、`AutoGen` 放缓都是查 PyPI 发现的）。
 
-https://dev523.medium.com/the-evolution-of-rag-how-retrieval-augmented-generation-is-transforming-enterprise-ai-in-2025-a0265bc1c297
+### 自动化体检（已接入 CI）
 
-假设性文档嵌入 (HyDE)
+| 触发 | 频率 | 行为 |
+|---|---|---|
+| `.github/workflows/link-check.yml` | 每季度（1/4/7/10 月 1 号） | 跑全量链接体检，失败自动开 `link-rot` Issue；恢复后自动关闭 |
+| 同上 | 改动 `*.md` 的 PR | 跑体检，结果写进 Job Summary（不阻塞合并） |
+| 手动 | `workflow_dispatch` | 随时可跑 |
 
-说明:
+本地跑：
 
-生成假设性文档: 利用一个LLM，根据用户查询生成一个理想化的、详细的回答文档。这个文档是“假设性”的，可能包含事实错误。
+```bash
+bash scripts/check_links.sh                 # 全量
+bash scripts/check_links.sh README.md       # 单个文件
+REPORT=report.md bash scripts/check_links.sh
+```
 
-嵌入假设性文档: 将这个生成的长篇幅、富含上下文的假设性文档进行向量化嵌入。
+判定分级：`OK` / `BLOCKED`（401/403/429，反爬，不算失效）/ `DEAD`（404/410/451，退出码 1）/ `ERROR`（000/5xx，退出码 2）。
 
-执行检索: 使用这个假设性文档的向量在数据库中进行相似度搜索。
+---
 
-链接:
+## 六、贡献
 
-https://cgorale111.medium.com/hyde-hypothetical-document-embeddings-3071840e364c
+欢迎提 Issue / PR 补充：
 
-https://docs.haystack.deepset.ai/docs/hypothetical-document-embeddings-hyde
+- 新的**稳定层**经典论文（有明确结论、可复现的方法）
+- 2026 年之后的模型与框架变更（请附发布日期与官方链接）
+- 失效链接的替换地址
 
-https://www.falkordb.com/blog/advanced-rag/
+提交时请标注：`[稳定]` / `[滚动 核对:YYYY-MM]`，并说明**为什么值得放进路线**（一句话即可，纯链接不收）。
 
-基于LLM的查询扩展 (LLM-QE)
+---
 
-说明:
+## License
 
-核心创新在于设计了一套精巧的奖励机制来优化（或对齐）用于查询扩展的LLM。
-
-该方法采用DPO算法，通过两种奖励模型来训练扩展模型：
-
-基于排序的奖励: 该模型评估LLM生成的扩展文档与“标准答案”文档在检索器（retriever）眼中的相似度。它直接对齐了扩展模型与检索模型的偏好，鼓励生成那些能够提升检索排名的内容。
-
-基于答案的奖励: 该模型首先让LLM根据查询和标准答案文档生成一个“理想答案”，然后评估扩展文档与这个理想答案的语义相关性。这个机制有效地抑制了LLM为了单纯追求排序奖励而生成冗长、无关内容的倾向，使得扩展结果更精确、更聚焦于回答问题本身 。
-
-链接:
-
-https://arxiv.org/html/2502.17057v1
-
-退步提示
-
-https://www.designveloper.com/blog/advanced-rag/
-
-https://blog.devops.dev/step-back-prompting-smarter-query-rewriting-for-higher-accuracy-rag-0eb95a9cc032
-
-SimGRAG
-
-https://aclanthology.org/2025.findings-acl.163/
-
-查询分解
-
-https://arxiv.org/html/2506.21384v1
-
-https://arxiv.org/html/2507.18910v1
-
-交叉编码器模型
-
-https://arxiv.org/html/2508.08742v1
-
-动态段落选择器
-
-https://arxiv.org/html/2508.09497v1
-
-上下文感知结构化与压缩
-
-https://arxiv.org/html/2508.19357v1
-
-CRAG (Corrective-Retrieval-Augmented Generation)
-
-说明: 决策节点：一个轻量级的检索评估器
-
-链接:
-
-https://arxiv.org/abs/2401.15884
-
-https://medium.com/@sulbha.jindal/corrective-retrieval-augmented-generation-crag-paper-review-2bf9fe0f3b31
-
-Self-RAG
-
-https://selfrag.github.io/
-
-https://www.datacamp.com/tutorial/self-rag
-
-Adaptive RAG
-
-https://arxiv.org/abs/2403.14403
-
-Graph RAG
-
-https://msdocs.cn/graphrag/
-
-自适应检索
-
-https://arxiv.org/abs/2504.05312
-
-混合架构
-
-https://arxiv.org/html/2509.12765v1
-
-Reasoning RAG
-
-https://arxiv.org/html/2506.10408v1
-
-3. Multi-Agent
-适合入门的agent教程
-https://github.com/datawhalechina/hello-agents
-
-https://www.anthropic.com/engineering/multi-agent-research-system
-
-https://collabnix.com/multi-agent-multi-llm-systems-the-future-of-ai-architecture-complete-guide-2025/
-
-https://github.com/microsoft/autogen
-
-https://github.com/context-machine-lab/ContextAgent
-
-4. 标准化协议
-
-MCP
-
-https://www.descope.com/learn/post/mcp
-
-https://docs.mcpcn.org/introduction
-
-https://mcpmarket.cn/
-
-A2A
-
-https://a2a-protocol.org/latest/#how-does-a2a-work-with-mcp
-
-https://codelabs.developers.google.com/intro-a2a-purchasing-concierge?hl=zh-cn#0
-
-5. LangGraph
-
-https://docs.langchain.com/oss/python/langgraph/overview
-
-6，llm入门
-https://github.com/datawhalechina/happy-llm
-
-第三节：基础算法
-
-1. 微调 (Fine-tuning)
-
-https://medium.com/@pradeepdas/the-fine-tuning-landscape-in-2025-a-comprehensive-analysis-d650d24bed97
-
-https://www.ibm.com/think/topics/parameter-efficient-fine-tuning
-
-https://www.geeksforgeeks.org/deep-learning/what-is-fine-tuning/
-
-https://github.com/hiyouga/LLaMA-Factory
-
-https://github.com/huggingface/peft
-
-https://github.com/dvgodoy/FineTuningLLMs
-
-https://github.com/unslothai/notebooks
-
-https://github.com/unslothai/unsloth
-
-2. 强化学习 (RL)
-
-https://www.gocodeo.com/post/top-5-reinforcement-learning-courses-in-2025-learn-from-basics-to-advanced-practice
-
-https://github.com/Ronchy2000/Multi-agent-RL
-
-https://www.marl-book.com/download/marl-book.pdf
-
-https://apxml.com/zh/courses/multi-agent-llm-systems-design-implementation/chapter-1-core-principles-multi-agent-llm/architectural-frameworks-llm-mas
-
-https://arxiv.org/html/2508.04652v1
-
-https://arxiv.org/html/2510.04935v1
-
-https://www.researchgate.net/publication/388920733_A_Survey_on_Explainable_Deep_Reinforcement_Learning
-
-https://github.com/uncbiag/Awesome-Foundation-Models
-
-https://github.com/Zehong-Wang/Awesome-Foundation-Models-on-Graphs
-
-https://www.findingtheta.com/blog/aligning-and-augmenting-intelligence-a-technical-survey-of-reinforcement-learning-in-large-language-models
-
-3. 预训练
-
-https://github.com/RUCAIBox/awesome-llm-pretraining
-
-4. 介绍了Instagram
-
-https://www.analyticsvidhya.com/blog/2025/10/how-instagram-leverages-ai-for-content-moderation/
-
-5. NLP
-
-https://www.geeksforgeeks.org/machine-learning/best-python-libraries-for-machine-learning/
-
-https://www.geeksforgeeks.org/nlp/history-and-evolution-of-nlp/
-
-https://github.com/huggingface/transformers
-
-6. 视觉
-
-https://arxiv.org/html/2503.04641v1
-
-7，DeepResearch
-https://huggingface.co/FractalAIResearch/Fathom-Search-4B
-
-第四节：LLM案例，新闻
-
-https://www.softwebsolutions.com/resources/llm-use-cases/
-
-https://www.rapidops.com/blog/top-groundbreaking-llm-use-cases/
-
-https://www.rundown.ai/
-
-https://techcrunch.com/category/artificial-intelligence/
+[MIT](LICENSE)
