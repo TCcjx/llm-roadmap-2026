@@ -1,0 +1,107 @@
+name: link-check
+
+# 季度体检 + 手动触发 + 改了 markdown 就跑
+on:
+  schedule:
+    - cron: '0 3 1 1,4,7,10 *'   # 每季度首月 1 号 03:00 UTC
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '**.md'
+      - 'scripts/check_links.sh'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run link check
+        id: check
+        continue-on-error: true
+        env:
+          TIMEOUT: 20
+          RETRIES: 2
+          PARALLEL: 8
+          REPORT: link-report.md
+        run: bash scripts/check_links.sh
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-report
+          path: link-report.md
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Summarize in job output
+        if: always()
+        run: |
+          {
+            echo "## 链接体检结果"
+            echo ""
+            echo '```'
+            cat link-report.md 2>/dev/null || echo "（未生成报告）"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open or update issue on failure
+        if: steps.check.outcome == 'failure' && github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.existsSync('link-report.md')
+              ? fs.readFileSync('link-report.md', 'utf8').slice(0, 60000)
+              : '报告缺失';
+            const title = '🔗 链接体检发现失效链接';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'link-rot'
+            });
+            const payload = {
+              body: `自动体检发现失效链接（workflow: ${context.workflow}, run: ${context.runId}）。\n\n\`\`\`\n${body}\n\`\`\``
+            };
+            if (issues.length) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: issues[0].number, body: payload.body
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, labels: ['link-rot'], ...payload
+              });
+            }
+
+      - name: Close issue when green
+        if: steps.check.outcome == 'success' && github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'link-rot'
+            });
+            for (const i of issues) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: i.number, body: '本次体检全部通过，自动关闭。'
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: i.number, state: 'closed'
+              });
+            }
+
+      - name: Fail job if dead links found
+        if: steps.check.outcome == 'failure'
+        run: |
+          echo "::error::发现失效链接，详见 link-report.md 工件"
+          exit 1
